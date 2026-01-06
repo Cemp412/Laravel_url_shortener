@@ -9,7 +9,7 @@ class Invitation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'company_id', 'role', 'token', 'created_by'];
+    protected $fillable = ['name', 'email', 'company_id', 'role', 'token', 'created_by', 'accepted_at', 'is_active'];
 
     /**
      * The attributes that should be cast.

@@ -9,17 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class InvitationMail extends Mailable
+class TestMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $invitation;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($invitation)
+    public function __construct()
     {
-        $this->invitation = $invitation;
+        //
     }
 
     /**
@@ -28,7 +27,7 @@ class InvitationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitation Mail',
+            subject: 'Test Mail',
         );
     }
 
@@ -38,10 +37,7 @@ class InvitationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.invitation',
-            with: [
-                'url' => route('register-invite', ['token' => $this->token]),
-            ]
+            view: 'emails.test',
         );
     }
 

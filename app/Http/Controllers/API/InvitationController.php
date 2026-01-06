@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use App\Mail\InvitationMail;
 use Validator;
 
-class InvitationController extends Controller
+class InvitationController extends BaseController
 {
     /**
      * Store a newly created invitation
@@ -66,56 +66,4 @@ class InvitationController extends Controller
         }
     }
 
-    /**
-     * accept invitation send via email
-     * 
-     * @return Illuminate\Http\JsonResponse;
-     */
-    public function acceptInvite(Request $request, $token = null) {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:invitations,email',
-            'password' => 'required|min:8|max:20'
-        ]);
-
-        if($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-        
-        try{
-            DB::beginTransaction();
-        
-            $invitation = Invitation::where($token) 
-                            ->where('email', $request->input('email'))
-                            ->whereNull('accepted_at')
-                            ->where('expires_at', '>', now())
-                            ->firstOrFail();
-
-            $user = User::create([
-                'name' => $invitation->name,
-                'email' => $invitation->email,
-                'company_id' => $invitation->company_id,
-                'password' => hashWithPepper($request->input('password')),
-            ]);
-
-            //assign role to user
-            $user->assignRole($invitation->role);
-
-            //set timestamp() value in invitations accepted_at
-            $invitation->update([
-                'accepted_at' => now(),
-                'is_active' => false
-            ]);
-
-            //set company status to active
-            $company = Company::where('id', $invitation->company_id)->update(['status' => 'active']);
-
-            $success['email'] = $invitation->email;
-            $success['redirect_to'] = route('login', ['email' => $invitation->email]);
-            return $this->sendResponse($success, 'Invitation accepted. You can login in now!');
-        }
-        catch(Exception $e) {
-            DB::rollback();
-            return $this->sendError("Server Error", [$e->getmessage()], 500);
-        }
-    }
 }
