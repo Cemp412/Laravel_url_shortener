@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\API\CompanyController;
-// use App\Http\Controllers\Web\AcceptInviteController;
+// use App\Http\Controllers\Web\RegisterInviteController;
 // use App\Mail\TestMail;
 // use Illuminate\Support\Facades\Mail;
 
@@ -34,8 +34,8 @@ Route::middleware('guest')->group(function() {
     });
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     // Route::view('/login-new', 'auth.login-new')->name('login.new');
-    // Route::get('/register-via-invite/{token}', [AcceptInviteController::class, 'show'])->name('register-invite');
-    // Route::post('/register-via-invite/{token}', [AcceptInviteController::class, 'store'])->name('accept-invite');
+    Route::get('/register-via-invite/{token}', [RegisterInviteController::class, 'show'])->name('register-invite');
+    Route::post('/register-via-invite/{token}', [RegisterInviteController::class, 'store'])->name('accept-invite');
     
 
 });

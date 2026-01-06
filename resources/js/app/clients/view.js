@@ -27,7 +27,7 @@ $(document).ready(function() {
                 'Accept': 'application/json'
             },
             success: (response) => {
-                console.log(response.status);
+                $('#inviteModal').modal('hide');
                 Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -35,10 +35,10 @@ $(document).ready(function() {
                     showConfirmButton: true,
                     //timer: 100
                 })
-                /* .then(() => {
+                .then(() => {
                     //redirect based on response
-                    window.location.href = response.data.redirect;
-                }); */
+                    window.location.reload();
+                });
             },
             error: (response) => {
                 let errormessage = '';

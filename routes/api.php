@@ -18,11 +18,9 @@ use App\Http\Controllers\API\InvitationController;
 */
 
 //Guest routes 
-Route::post('/invitations/accept/{token}', [InvitationController::class, 'acceptInvite'])->name('invitations.accept');
-
 //Public routes
 Route::controller(AuthController::class)->group(function(){
-    Route::post('register', 'register');
+    // Route::post('register', 'register');
     Route::post('login', 'login')->name('api.login');
 });
 
