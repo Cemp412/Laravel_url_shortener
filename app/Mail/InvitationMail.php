@@ -20,6 +20,7 @@ class InvitationMail extends Mailable
     public function __construct($invitation)
     {
         $this->invitation = $invitation;
+        
     }
 
     /**
@@ -40,7 +41,7 @@ class InvitationMail extends Mailable
         return new Content(
             view: 'emails.invitation',
             with: [
-                'url' => route('register-invite', ['token' => $this->token]),
+                'url' => route('register-invite', ['token' => $this->invitation->token]),
             ]
         );
     }

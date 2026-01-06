@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\API\CompanyController;
-// use App\Http\Controllers\Web\RegisterInviteController;
+use App\Http\Controllers\Web\RegisterInviteController;
 // use App\Mail\TestMail;
 // use Illuminate\Support\Facades\Mail;
 

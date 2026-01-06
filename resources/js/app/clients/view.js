@@ -1,15 +1,8 @@
 $(document).ready(function() {
-    /* $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), //post successful login requests
-            'Accept': 'application/json'
-        }
-    }); */
 
     $("#inviteModalForm").on("submit", function(e) {
         e.preventDefault();
-        $('#sendInvite-btn').prop('disabled', true); //disabled login button to prevent double-submission
+        $('#sendInvite-btn').prop('disabled', true); //disabled button to prevent double-submission
 
         var form = $(this);
         var url = form.attr("action");
@@ -17,12 +10,11 @@ $(document).ready(function() {
         var formData = form.serialize();
 
         $.ajax({
-            type: method,
             url:  url,
+            type: method,
             data: formData,
             dataType: "json",
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                 'Accept': 'application/json'
             },
@@ -40,13 +32,13 @@ $(document).ready(function() {
                     window.location.reload();
                 });
             },
-            error: (response) => {
+            error: (xhr) => {
                 let errormessage = '';
 
                 $('#sendInvite-btn').prop('disabled', false); //enable submit button
 
-                if (response.responseJSON && response.responseJSON["errors"]) {
-                    $.each(response.responseJSON["errors"], function (keys, values) {
+                if (xhr.responseJSON && xhr.responseJSON["errors"]) {
+                    $.each(xhr.responseJSON["errors"], function (keys, values) {
                         if (Array.isArray(values)) {
                             $.each(values, function (key, value) {
                                 errormessage += value + "<br>";
@@ -56,8 +48,8 @@ $(document).ready(function() {
                         }
                     });
                 } 
-                else if (response.responseJSON && response.responseJSON.message) {
-                    errormessage = response.responseJSON.message;
+                else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errormessage = xhr.responseJSON.message;
                 } 
                 else {
                     errormessage = "An unexpected error occurred. Please try again.";
