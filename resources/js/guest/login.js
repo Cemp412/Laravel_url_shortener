@@ -1,5 +1,11 @@
 $(document).ready(function() {
-    
+    //Get the 'email' parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailValue = urlParams.get('email');
+
+    if (emailValue) {
+        $('input[name="email"]').val(emailValue);
+    }
 
     $("#loginForm").on("submit", function(e) {
         e.preventDefault(); //prevent default form submission

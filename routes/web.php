@@ -49,12 +49,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     //SuperAdmin routes
-    /* Route::middleware('role:superadmin')->group(function () {
-    }); */
+    Route::middleware('role:superadmin')->group(function () {
+        Route::view('/clients/list', 'clients.view')->name('clients.list');
+    });
 
     //Superadmin and admin routes
     Route::middleware('role:superadmin|admin')->group(function() {
-        Route::view('/clients/list', 'clients.view')->name('clients.list');
+        Route::view('/team-members/list', 'team.view')->name('team.list');
     });
 });
 

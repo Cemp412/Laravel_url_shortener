@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\InvitationController;
+use App\Http\Controllers\API\RolesAndPermController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:superadmin|admin')->group(function() {
         Route::post('/invitations', [InvitationController::class, 'store'])->name('api.invitations.store');
+        Route::get('/roles-list', [RolesAndPermController::class, 'getRoles'])->name('api.roles-list');
     });
     
 

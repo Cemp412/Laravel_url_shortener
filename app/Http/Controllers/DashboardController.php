@@ -27,8 +27,11 @@ class DashboardController extends Controller
     {
         $user = auth::user();
 
-        if($user->hasRole('superadmin') || $user->hasrole('admin')) {
+        if($user->hasRole('superadmin')) {
             return view('clients.view');
+        }
+        else if($user->hasrole('admin')) {
+            return view('team.view');
         }
         else{
             return view('dashboard');

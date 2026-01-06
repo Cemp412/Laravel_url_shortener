@@ -54,7 +54,8 @@
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();
+                                                     localStorage.removeItem('auth_token');">
                                         {{ __('Logout') }}
                                     </a>
 
@@ -100,6 +101,11 @@
         @endif 
     @endguest
 
+    <script>
+        @if(session('temp_api_token'))
+            localStorage.setItem('auth_token', "{{ session('temp_api_token') }}");
+        @endif
+    </script>
     <!-- Jquery CDN -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 

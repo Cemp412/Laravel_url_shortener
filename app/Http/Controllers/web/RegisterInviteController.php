@@ -59,8 +59,8 @@ class RegisterInviteController extends Controller
             }
 
             $user = User::create([
-                'name' => $request->name,
-                'email' => $invitation->email,
+                'name' => strtolower($request->name),
+                'email' => strtolower($invitation->email),
                 'company_id' => $invitation->company_id,
                 'password' => Hash::make($request->input('password')),
             ]);

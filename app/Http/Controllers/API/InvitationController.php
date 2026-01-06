@@ -29,22 +29,17 @@ class InvitationController extends BaseController
 
             DB::beginTransaction();
 
-            //Company creation logic for role('superadmin')
-            // if($authUser->hasRole('superadmin')) {
-                $company = $authUser->hasRole('superadmin') ? Company::create(['name' => $request->name,'email' => $request->email]) : $company = $authUser->company;
-            // }
-            // else{ 
-                //Company creation logic for role('admin')
-            //     $company = $authUser->company;
-            // }
+            //Company creation logic
+            $company = $authUser->hasRole('superadmin') ? Company::create(['name' => strtolower($request->name),'email' => $request->email]) : $company = $authUser->company;
+           
             if(!$company) throw new Exception("Company does not exist");
 
             // Create Invitation
             $invitation = Invitation::create([
-                'name' => $request->name,
-                'email' => $request->email,
+                'name' => strtolower($request->name),
+                'email' => strtolower($request->email),
                 'company_id' => $company->id,
-                'role' => $request->role ?? 'admin',
+                'role' => strtolower($request->role) ?? 'admin',
                 'token' => Str::uuid(),
                 'expires_at' => now()->addDays(3),
                 'created_by' => $authUser->id,
