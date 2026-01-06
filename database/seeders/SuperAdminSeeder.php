@@ -16,16 +16,15 @@ class SuperAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        /* Schema::disableForeignKeyConstraints();
+       /*  Schema::disableForeignKeyConstraints();
         User::truncate();
         Schema::enableForeignKeyConstraints(); */
-
         $password = config('constants.auth.pass_key');
         $user = User::firstOrCreate(
             [ 'email' => 'superadmin@example.com'],
             [
                 'name' => 'Super Admin',
-                'password' => hashWithPepper($password), //bcrypt($password), 
+                'password' => $password, //hashWithPepper($password), //bcrypt($password), 
                 'company_id' => null
             
             ]);
