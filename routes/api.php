@@ -9,6 +9,7 @@ use App\Http\Controllers\API\RolesAndPermController;
 use App\Http\Controllers\API\ClientResourceController;
 use App\Http\Controllers\API\TeamResourceController;
 use App\Http\Controllers\API\MemberResourceController;
+use App\Http\Controllers\API\ShortUrlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:member')->group(function() {
         Route::get('/short-urls-list', [MemberResourceController::class, 'shortUrls'])->name('api.ShortUrls-list');
+    });
+
+    Route::middleware('role:admin|member')->group(function() {
+        Route::apiResource('/short-urls', ShortUrlController::class)->only(['store'])->names(['store' => 'api.short-urls.store']);
     });
     
 });

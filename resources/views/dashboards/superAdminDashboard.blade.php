@@ -44,7 +44,8 @@
             <!-- Filter dropdown -->
             <div>
                 <select id="dateFilter" class="form-select d-inline w-auto">
-                    <option value="">This Month</option>
+                    <option value="">Filter</option>
+                    <option value="this_month">This Month</option>
                     <option value="today">Today</option>
                     <option value="last_week">Last Week</option>
                     <option value="last_month">Last Month</option>

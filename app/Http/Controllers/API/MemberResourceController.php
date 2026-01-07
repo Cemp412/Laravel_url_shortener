@@ -86,9 +86,19 @@ class MemberResourceController extends Controller
         // Filter
         $query->when($request->filter, function ($q, $filter) {
             return match ($filter) {
-                'today' => $q->whereDate('short_urls.created_at', now()),
-                'last_week' => $q->whereBetween('short_urls.created_at', [now()->subWeek(), now()]),
-                'last_month' => $q->whereMonth('short_urls.created_at', now()->subMonth()->month),
+                'today' => $q->whereDate('short_urls.created_at', today()),
+                'last_week' => $q->whereBetween('short_urls.created_at', [
+                    now()->subDays(7)->startOfDay(), 
+                    now()->endOfDay()
+                ]),
+                'this_month' => $q->whereBetween('short_urls.created_at', [
+                    now()->startOfMonth(), 
+                    now()->endOfDay()
+                ]),
+                'last_month' => $q->whereMonth('short_urls.created_at', [
+                    now()->subMonth()->startOfMonth(), 
+                    now()->subMonth()->endOfMonth()
+                ]),
                 default => $q,
             };
         });
@@ -99,7 +109,7 @@ class MemberResourceController extends Controller
                     return url($row->short_code);
                 })
                 ->editColumn('created_at', function ($row) {
-                    return optional($row->created_at)->format('Y-m-d');
+                    return optional($row->created_at)->format('d-M-Y');
                 })
                 ->rawColumns(['short_url'])
                 ->make(true);
