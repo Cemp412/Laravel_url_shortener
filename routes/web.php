@@ -51,11 +51,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     //SuperAdmin routes
     Route::middleware('role:superadmin')->group(function () {
         Route::view('/clients/list', 'clients.view')->name('clients.list');
+        Route::view('/clients/generated-urls', 'clients.generatedUrlList')->name('clients.generatedUrlList');
     });
 
     //Superadmin and admin routes
     Route::middleware('role:superadmin|admin')->group(function() {
         Route::view('/team-members/list', 'team.view')->name('team.list');
+        Route::view('/team-members/generated-urls', 'team.teamgeneratedUrls')->name('team.generatedUrls');
     });
 });
 

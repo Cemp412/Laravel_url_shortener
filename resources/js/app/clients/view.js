@@ -17,6 +17,7 @@ $(document).ready(function() {
             dataType: "json",
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 'Accept': 'application/json'
             },
             success: (response) => {

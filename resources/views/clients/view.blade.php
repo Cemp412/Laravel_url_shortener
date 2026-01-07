@@ -19,11 +19,9 @@
         <div class="card-body">
             <table class="table table-bodered" id="clientsTable">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        @role('superadmin')
+                    <tr>                        
                         <th>Client Name</th>
-                        @endrole
+                        <th>Status</th>
                         <th>Users</th>
                         <th>Total Generated URLs</th>
                         <th>Total URL Hits</th>
@@ -36,8 +34,7 @@
         </div>
     </div>
     
-    <!-- URLs list -->
-    <div class="card mb-3"></div>
+    
 
     <!-- Invite modal -->
      <div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
@@ -86,4 +83,5 @@
 
 @push('scripts')
     @vite('resources/js/app/clients/view.js')
+    @vite('resources/js/app/clients/clientTables.js')
 @endpush
