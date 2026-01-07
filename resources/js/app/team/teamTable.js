@@ -59,7 +59,7 @@ $(document).ready(function() {
         },
         columns: [
             { data: 'short_url', name: 'short_urls.short_code' },
-            { data: 'original_url', name: 'short_urls.original_url' },
+            { data: 'long_url', name: 'long_url' },
             { data: 'hits', name: 'short_urls.hits' },
             { data: 'created_by', name: 'users.name' },
             { data: 'created_at', name: 'short_urls.created_at' }

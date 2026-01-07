@@ -44,7 +44,14 @@ class TeamResourceController extends Controller
                         DB::raw('COALESCE(url_metrics.total_hits, 0) as total_hits'),
                     ]);
 
-        return DataTables::of($users)->make(true);
+        return DataTables::of($users)
+                ->editColumn('name', function ($row) {
+                    return ucfirst($row->name);
+                })
+                ->editColumn('role', function ($row) {
+                    return ucfirst($row->role);
+                })
+        ->make(true);
     }
 
 
@@ -110,7 +117,7 @@ class TeamResourceController extends Controller
         ->leftJoin('users', 'users.id', '=', 'short_urls.user_id')
         ->select([
             'short_urls.id',
-            'short_urls.original_url',
+            'short_urls.original_url as long_url',
             'short_urls.short_code',
             'short_urls.hits',
             'short_urls.created_at',
@@ -118,22 +125,35 @@ class TeamResourceController extends Controller
         ]);
 
     // Filter
-    $query->when($request->filter, function ($q, $filter) {
-        return match ($filter) {
-            'today' => $q->whereDate('short_urls.created_at', now()),
-            'last_week' => $q->whereBetween('short_urls.created_at', [now()->subWeek(), now()]),
-            'last_month' => $q->whereMonth('short_urls.created_at', now()->subMonth()->month),
-            default => $q,
-        };
-    });
+        $query->when($request->filter, function ($q, $filter) {
+            return match ($filter) {
+                'today' => $q->whereDate('short_urls.created_at', today()),
+                'last_week' => $q->whereBetween('short_urls.created_at', [
+                    now()->subDays(7)->startOfDay(), 
+                    now()->endOfDay()
+                ]),
+                'this_month' => $q->whereBetween('short_urls.created_at', [
+                    now()->startOfMonth(), 
+                    now()->endOfDay()
+                ]),
+                'last_month' => $q->whereMonth('short_urls.created_at', [
+                    now()->subMonth()->startOfMonth(), 
+                    now()->subMonth()->endOfMonth()
+                ]),
+                default => $q,
+            };
+        });
 
     return DataTables::of($query)
         ->addIndexColumn()
         ->addColumn('short_url', function ($row) {
             return url($row->short_code);
         })
+        ->editColumn('created_by', function ($row) {
+                    return ucfirst($row->created_by);
+        })
         ->editColumn('created_at', function ($row) {
-            return optional($row->created_at)->format('Y-m-d');
+            return optional($row->created_at)->format('d-M-Y');
         })
         ->rawColumns(['short_url'])
         ->make(true);

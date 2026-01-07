@@ -18,7 +18,7 @@ $(document).ready(function() {
         },
         columns: [
             { data: 'short_url', name: 'short_code' },
-            { data: 'original_url', name: 'long_url' },
+            { data: 'long_url', name: 'long_url' },
             { data: 'hits', name: 'hits' },
             { data: 'created_at', name: 'created_at' }
         ]

@@ -23,8 +23,17 @@ class ClientResourceController extends Controller
                     ->withCount('users')
                     ->withCount('shortUrls')
                     ->withSum('shortUrls as total_hits', 'hits');
+
         
-        return DataTables::of($query)->make(true);
+        return DataTables::of($query)
+                ->addIndexColumn()
+                ->editColumn('name', function ($row) {
+                    return ucfirst($row->name);
+                })
+                 ->addColumn('total_hits', function ($row) {
+                    return $row->total_hits ?? 0;
+                })
+        ->make(true);
     }
 
     /**
@@ -84,18 +93,31 @@ class ClientResourceController extends Controller
                     ->select('short_urls.*');
 
         //filter logic
-        $query->when($request->filter, function($q, $filter) {
-            return match($filter) {
-                'today' => $q->whereDate('created_at', now()),
-                'last_week' => $q->whereBetween('created_at', [now()->subWeek(), now()]),
-                'last_month' => $q->whereMonth('created_at', now()->subMonth()->month),
-                default => $q
+        $query->when($request->filter, function ($q, $filter) {
+            return match ($filter) {
+                'today' => $q->whereDate('short_urls.created_at', today()),
+                'last_week' => $q->whereBetween('short_urls.created_at', [
+                    now()->subDays(7)->startOfDay(), 
+                    now()->endOfDay()
+                ]),
+                'this_month' => $q->whereBetween('short_urls.created_at', [
+                    now()->startOfMonth(), 
+                    now()->endOfDay()
+                ]),
+                'last_month' => $q->whereMonth('short_urls.created_at', [
+                    now()->subMonth()->startOfMonth(), 
+                    now()->subMonth()->endOfMonth()
+                ]),
+                default => $q,
             };
         });
 
         return DataTables::of($query)
-                    ->addColumn('company', fn ($url) => $url->company_name ?? 'N/A')
                     ->addIndexColumn()
+                    ->addColumn('short_url', function ($row) {
+                        return url($row->short_code);
+                    })
+                    ->addColumn('company', fn ($row) => ucfirst($row->company->name) ?? 'N/A')
                     ->toJson();
     }
 }
