@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -36,5 +37,15 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    /**
+     * try to override authenticate method
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $token = $user->createToken('MyApp')->plainTextToken;
+        session()->flash('temp_api_token', $token);
+        return redirect()->intended($this->redirectTo);
     }
 }

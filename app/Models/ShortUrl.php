@@ -15,4 +15,12 @@ class ShortUrl extends Model
     public function company() {
         return $this->belongsTo(Company::class);
     }
+
+    //relation with user
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    //scope-visibility
+    // public function scope
 }

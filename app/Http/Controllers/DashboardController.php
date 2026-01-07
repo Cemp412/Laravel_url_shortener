@@ -26,12 +26,6 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth::user();
-
-        if($user->hasRole('superadmin')) {
-            return view('clients.view');
-        }
-        else{
-            return view('dashboard');
-        }
+        return view('dashboard');
     }
 }
